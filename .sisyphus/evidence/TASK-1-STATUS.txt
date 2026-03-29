@@ -1,0 +1,166 @@
+═══════════════════════════════════════════════════════════════════════════════
+TASK 1: FOUNDATION MODULE — FINAL STATUS REPORT
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2026-03-25
+Status: ✓ COMPLETE AND VERIFIED
+
+═══════════════════════════════════════════════════════════════════════════════
+DELIVERABLES CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+Files Created/Verified:
+  ✓ config.py (870 bytes)
+  ✓ potential.py (1634 bytes)
+
+config.py Constants (9/9):
+  ✓ C_LIGHT = 137.036
+  ✓ M_ELECTRON = 1.0
+  ✓ KAPPA = -1
+  ✓ Z = 92
+  ✓ LAMBDA_SHIELD = 0.1
+  ✓ ALPHA_MAP = 0.1
+  ✓ L_SCALE = 1.0
+  ✓ N_POINTS = 100
+  ✓ R_MAX = 100.0
+
+potential.py Exports (2/2):
+  ✓ V(r, Z, lambda_shield)
+  ✓ analytical_dirac_energy(n, kappa, Z, c)
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCEPTANCE CRITERIA VERIFICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Scenario 1: V(r) Monotonicity
+  Command: python -c "from potential import V; import numpy as np; \
+            r=np.array([1.,2.,5.]); v=V(r,92,0.1); print(v); \
+            print('monotone:', v[0]<v[1]<v[2]<0)"
+  Expected: Three negative values, strictly decreasing
+  Result: ✓ PASS
+  Output: [-83.24504246 -37.66161464 -11.16016414]
+          monotone: True
+
+Scenario 2: V(r=0) Singularity Protection
+  Command: python -c "from potential import V; import numpy as np; \
+            v=V(np.array([0.0]),92,0.1); print(v); \
+            print('finite:', np.isfinite(v[0]))"
+  Expected: Finite value, no NaN/inf, exit code 0
+  Result: ✓ PASS
+  Output: [-9.2e+16]
+          finite: True
+
+Scenario 3: Analytical Energy (Z=1, n=1, κ=-1)
+  Command: python -c "from potential import analytical_dirac_energy; \
+            E=analytical_dirac_energy(1,-1,1,137.036); \
+            print(f'E={E:.8f}'); \
+            print('reasonable:', 0.999 < E < 1.0)"
+  Expected: E in range (0.999, 1.0)
+  Result: ✓ PASS
+  Output: E=0.99997337
+          reasonable: True
+
+═══════════════════════════════════════════════════════════════════════════════
+CODE QUALITY VERIFICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ No TODO/FIXME comments
+✓ Python syntax valid (py_compile passed)
+✓ Comprehensive docstrings present
+✓ Docstrings describe atomic units and total-energy convention
+✓ Parameter naming unambiguous (ALPHA_MAP ≠ alpha_fs)
+✓ Functions handle both scalar and array inputs
+✓ All outputs are finite (no NaN/inf)
+✓ No new dependencies added
+✓ Imports from config.py are correct
+
+═══════════════════════════════════════════════════════════════════════════════
+IMPLEMENTATION NOTES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Energy Convention
+   - analytical_dirac_energy() returns TOTAL energy including rest mass
+   - Output is normalized to units of mc² (where m=1 in atomic units)
+   - For hydrogen-like atoms: E ~ +c² for positive-energy bound states
+   - This matches the plan's total-energy convention
+
+2. Singularity Protection
+   - V(r) uses np.where(r < 1e-15, -Z*1e15, ...) to handle r=0
+   - RuntimeWarning about divide-by-zero is expected (numpy evaluates both
+     branches before selection) and has no functional impact
+   - All outputs are finite and well-defined
+
+3. Parameter Naming
+   - ALPHA_MAP = 0.1 (mapping parameter for MAB-GPS)
+   - alpha_fs = 1/c ≈ 0.0073 (fine-structure constant)
+   - These are explicitly separated to prevent confusion in downstream solvers
+   - config.py clearly documents this distinction
+
+═══════════════════════════════════════════════════════════════════════════════
+VERIFICATION EVIDENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Evidence files created:
+  ✓ task-1-completion.txt (detailed completion report)
+  ✓ task-1-potential-basic.txt (V(r) monotonicity test)
+  ✓ task-1-potential-singularity.txt (V(r=0) protection test)
+  ✓ task-1-analytic-hydrogen.txt (analytical energy test)
+  ✓ task-1-summary.txt (implementation summary)
+
+Notepad updates:
+  ✓ .sisyphus/notepads/dirac-equation-solver/learnings.md (appended)
+
+═══════════════════════════════════════════════════════════════════════════════
+DEPENDENCIES FOR DOWNSTREAM TASKS
+═══════════════════════════════════════════════════════════════════════════════
+
+Task 1 provides stable foundation for:
+
+  Task 2 (B-spline Galerkin Solver):
+    - Imports: config (all constants), potential.V
+    - Uses: N_POINTS, R_MAX, Z, LAMBDA_SHIELD, KAPPA, C_LIGHT, V()
+
+  Task 3 (MAB-GPS Pseudospectral Solver):
+    - Imports: config (all constants), potential.V, potential.analytical_dirac_energy
+    - Uses: N_POINTS, L_SCALE, ALPHA_MAP, Z, LAMBDA_SHIELD, KAPPA, C_LIGHT
+    - Uses: V(), analytical_dirac_energy() for lambda=0 validation
+
+  Task 4 (Integration, Plotting, Tests):
+    - Imports: config, potential.V, potential.analytical_dirac_energy
+    - Uses: All exports for validation, plotting, and pytest tests
+
+═══════════════════════════════════════════════════════════════════════════════
+FINAL CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ All 9 constants defined with exact values
+✓ V(r) implements shielded Coulomb potential correctly
+✓ V(r) handles r=0 singularity without NaN/inf
+✓ analytical_dirac_energy() implements hydrogen-like Dirac formula
+✓ analytical_dirac_energy() returns total energy in units of mc²
+✓ Parameter naming unambiguous (ALPHA_MAP ≠ alpha_fs)
+✓ Docstrings present and comprehensive
+✓ No TODO/FIXME comments
+✓ Python syntax valid
+✓ All acceptance criteria met
+✓ Evidence files created
+✓ Notepad updated
+✓ No new dependencies added
+✓ API stable for downstream tasks
+
+═══════════════════════════════════════════════════════════════════════════════
+CONCLUSION
+═══════════════════════════════════════════════════════════════════════════════
+
+Task 1 is COMPLETE and VERIFIED.
+
+The foundation module provides:
+  - Stable configuration management (config.py)
+  - Robust potential function with singularity protection (potential.py)
+  - Analytical solution for validation (analytical_dirac_energy)
+  - Clear parameter naming and documentation
+  - Ready API for Wave 2 (Tasks 2 and 3)
+
+All acceptance criteria passed. Ready to proceed with Task 2 and Task 3.
+
+═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,4 @@
+All eigenvalues finite/real: True
+No imaginary filtering: eigh guarantees real
+Total eigenvalues: 296 (expected 2*(N-2) = 296)
+PASS: True

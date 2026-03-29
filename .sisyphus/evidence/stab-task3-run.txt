@@ -1,0 +1,30 @@
+============================================================
+Stabilization Method: Resonance State Search
+============================================================
+Parameters: Z=92, kappa=1, lambda=0.1, N=150
+L scan: 0.5 to 3.0, step 0.05  (51 L values)
+Energy window: [0.9, 1.2] mc²
+
+Phase 1: Scanning L_scale...
+  L=0.500: 84 levels in window
+  L=1.000: 101 levels in window
+  L=1.500: 111 levels in window
+  L=2.000: 118 levels in window
+  L=2.500: 122 levels in window
+  L=3.000: 126 levels in window
+  -> 5693 total eigenvalues collected across 51 L values
+
+Phase 2: Tracking levels and identifying resonance plateau...
+  -> Resonance found: E_res = 0.999892 mc²  (18776.84 a.u.)
+  -> Optimal scale:   L_opt = 1.0000
+
+Phase 3: Generating figures...
+  -> Saved: fig_stabilization.png
+  -> Saved: fig_resonance_wf.png
+
+============================================================
+Done.
+============================================================
+exit_code=0
+-rw-r--r--@ 1 loveme  staff   111K Mar 26 23:07 fig_resonance_wf.png
+-rw-r--r--@ 1 loveme  staff   188K Mar 26 23:07 fig_stabilization.png

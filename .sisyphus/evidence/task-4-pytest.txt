@@ -1,0 +1,15 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.9, pytest-7.4.0, pluggy-1.0.0 -- /Users/loveme/anaconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/loveme/Documents/毕业论文/科研训练/sci_trainning_code
+plugins: anyio-3.5.0, requests-mock-1.12.1
+collecting ... collected 6 items
+
+test_solvers.py::TestPotential::test_potential_monotone PASSED           [ 16%]
+test_solvers.py::TestPotential::test_potential_r0_safe PASSED            [ 33%]
+test_solvers.py::TestAnalytical::test_analytical_hydrogen PASSED         [ 50%]
+test_solvers.py::TestMABGPS::test_mabgps_no_spurious PASSED              [ 66%]
+test_solvers.py::TestMABGPS::test_mabgps_validation_lambda0 PASSED       [ 83%]
+test_solvers.py::TestBspline::test_bspline_has_spurious PASSED           [100%]
+
+============================== 6 passed in 4.83s ===============================

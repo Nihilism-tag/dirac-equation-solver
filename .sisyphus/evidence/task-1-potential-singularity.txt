@@ -1,0 +1,4 @@
+/Users/loveme/Documents/毕业论文/科研训练/sci_trainning_code/potential.py:24: RuntimeWarning: divide by zero encountered in divide
+  return np.where(r < 1e-15, -Z * 1e15, -Z / r * np.exp(-lambda_shield * r))
+[-9.2e+16]
+finite: True

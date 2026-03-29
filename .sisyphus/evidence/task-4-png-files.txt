@@ -1,0 +1,2 @@
+-rw-r--r--@ 1 loveme  staff    67K Mar 25 21:41 spectrum.png
+-rw-r--r--@ 1 loveme  staff    57K Mar 25 21:41 wavefunction.png
