@@ -14,7 +14,7 @@ KAPPA = 1  # Quantum number for p_{1/2} state (provides centrifugal barrier for 
 
 # Nuclear and potential parameters
 Z = 1  # Nuclear charge (uranium)
-LAMBDA_SHIELD = 0.1  # Shielding parameter (NOT fine-structure constant)
+LAMBDA_SHIELD = 0.4  # Shielding parameter (NOT fine-structure constant)
 
 # MAB-GPS mapping parameters
 ALPHA_MAP = 0.1  # Mapping parameter (controls grid density near origin) - reduced for finer near-origin resolution
