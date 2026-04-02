@@ -1,125 +1,148 @@
-# 狄拉克方程求解器工程文档
+# Dirac Equation Solver
 
-本文件夹包含求解含屏蔽库仑势的单电子径向狄拉克方程的完整数值计算框架。
+A comprehensive numerical framework for solving the single-electron radial Dirac equation with screened Coulomb potential, designed for studying resonance states in relativistic quantum systems.
 
-## 文件清单
+## Features
 
-### 核心代码文件（14个）
+- **Three numerical methods**: B-spline finite element, MAB-GPS pseudospectral, and stabilization methods
+- **Complex Coordinate Rotation (CCR)**: Resonance state identification in the positive energy continuum
+- **Interactive visualization**: Real-time exploration of complex energy spectra
+- **Comprehensive testing**: 39+ tests covering numerical stability and boundary conditions
+- **Detailed documentation**: Algorithm explanations, implementation guides, and validation results
 
-| 文件 | 说明 |
-|------|------|
-| `config.py` | 物理常数与数值参数配置 |
-| `potential.py` | 势能函数与解析能量公式 |
-| `bspline.py` | B-样条有限元求解器（对比基准） |
-| `mabgps.py` | **MAB-GPS伪谱求解器**（核心算法） |
-| `stab_scan.py` | 稳定化扫描与共振识别 |
-| `stab_plot.py` | 稳定化可视化（稳定化图+共振波函数） |
-| `run_stab.py` | 稳定化方法主入口 |
-| `ccr_scan.py` | **CCR theta扫描与复能量数据采集** |
-| `ccr_interactive_plot.py` | **CCR交互式复能量散点图** |
-| `test_solvers.py` | 核心求解器测试套件（7项测试） |
-| `test_stabilization.py` | 稳定化方法测试套件（9项测试） |
-| `test_ccr_scan.py` | CCR扫描测试套件 |
-| `main.py` | MAB-GPS与B-样条对比主程序 |
-| `plot.py` | 基础绘图功能 |
+## Quick Start
 
-### 文档文件（1个）
+### Installation
 
-| 文件 | 说明 |
-|------|------|
-| `工程说明.md` | **完整工程文档**（中文）- 包含算法原理、策略选择、验证结果、缺陷修复历程 |
+```bash
+cd dirac-equation-solver
+pip install numpy scipy matplotlib pytest
+```
 
-## 快速开始
+### Basic Usage
 
-### 运行稳定化分析
+**Run stabilization analysis**:
 ```bash
 python run_stab.py
 ```
+Outputs: `fig_stabilization.png`, `fig_resonance_wf.png`
 
-### CCR共振搜索与可视化
+**Compare MAB-GPS vs B-spline methods**:
+```bash
+python main.py
+```
+Outputs: `spectrum.png`, `wavefunction.png`
 
-#### 1. 执行theta扫描采集复能量数据
+### CCR Resonance Search Workflow
+
+**Step 1: Perform theta scan to collect complex energy data**
 ```bash
 python ccr_scan.py --theta-start 0.05 --theta-stop 0.50 --theta-step 0.02 --out ccr_data.npz
 ```
 
-参数说明：
-- `--theta-start`, `--theta-stop`, `--theta-step`：theta角度范围与步长
-- `--out`：输出`.npz`文件路径（必需）
-- `--N`, `--L`, `--alpha-map`：可选，覆盖`config.py`中的数值参数
-
-输出`.npz`文件包含：
-- `E_re`：实部能量矩阵，形状`(n_theta, n_eig)`
-- `E_im`：虚部能量矩阵，同形状
-- `thetas`：theta值数组
-- `mc2`：电子静止质量能量（用于归一化）
-- `meta_Z`, `meta_kappa`, `meta_lambda`, `meta_N`, `meta_L`, `meta_alpha`, `meta_c`：扫描参数元数据
-
-#### 2. 交互式可视化复能量谱
+**Step 2: Interactive visualization of complex energy spectrum**
 ```bash
 python ccr_interactive_plot.py --in ccr_data.npz
 ```
+Interactive controls: zoom (z key), reset (r key), save (s key)
 
-交互控制：
-- **工具栏缩放**：拖动矩形框进行缩放
-- **z键**：切换矩形选择框（绘制矩形进行缩放）
-- **r键**：重置到初始视图
-- **s键**：保存当前缩放视图（若未指定`--out`则生成时间戳文件名）
-
-可选参数：
-- `--out PATH`：保存图像路径（PNG/PDF/SVG）
-- `--cmap NAME`：颜色映射（默认：`turbo`）
-- `--re-min`, `--re-max`, `--im-min`, `--im-max`：初始坐标轴范围
-- `--s FLOAT`：散点大小（默认：3.0）
-- `--alpha FLOAT`：散点透明度（默认：0.5）
-
-#### 3. 无头绘图（CI/服务器环境）
+**Step 3: Headless plotting (for CI/server environments)**
 ```bash
-MPLBACKEND=Agg python ccr_interactive_plot.py --in ccr_data.npz --no-show --out /tmp/ccr_plot.png
+MPLBACKEND=Agg python ccr_interactive_plot.py --in ccr_data.npz --no-show --out ccr_plot.png
 ```
 
-**图表特性**：
-- 默认深色主题（GitHub深色配色）
-- 默认颜色映射：`turbo`（可通过`--cmap`覆盖）
-- 参考线：`Re(E)=mc²`（虚线）和`Im(E)=0`（实线）
-- 悬停提示：显示点的Re/Im/theta值
+### Run Demos
+```bash
+python ccr_demo.py
+```
+Includes 4 comprehensive demonstrations:
+1. Fixed-theta resonance finding
+2. Theta-scan observing resonance emergence
+3. Resonance trajectory tracking
+4. Complex-plane visualization
 
-### 运行测试
+### Run Tests
 ```bash
 pytest test_solvers.py test_stabilization.py test_ccr_scan.py -q
+pytest test_ccr.py -v
 ```
 
-### 运行基础对比
-```bash
-python main.py
+## Project Structure
+
+```
+dirac-equation-solver/
+├── config.py              # Physical constants and numerical parameters (atomic units)
+├── potential.py           # Potential functions and analytical energy formulas
+├── bspline.py            # B-spline finite element solver (benchmark)
+├── mabgps.py             # MAB-GPS pseudospectral solver (core algorithm with CGL nodes)
+├── complex_coordinate_rotation.py  # CCR transformation and resonance extraction
+├── mabgps_ccr.py         # CCR-enabled MAB-GPS solver
+├── stab_scan.py          # Stabilization scan and level tracking
+├── stab_plot.py          # Stabilization visualization (stabilization plot + resonance wavefunction)
+├── run_stab.py           # Stabilization method entry point
+├── ccr_scan.py           # CCR theta scan and complex energy data collection
+├── ccr_interactive_plot.py  # Interactive complex energy scatter plot
+├── ccr_demo.py           # CCR demonstration script (4 complete examples)
+├── test_solvers.py       # Core solver test suite (7 tests)
+├── test_stabilization.py # Stabilization method test suite (9 tests)
+├── test_ccr.py           # Comprehensive CCR test suite (13 tests)
+├── test_ccr_scan.py      # CCR scan test
+├── verify_ccr.py         # CCR verification script
+├── main.py               # MAB-GPS vs B-spline comparison
+├── plot.py               # Basic plotting functions
+└── pic/                  # Generated images directory
 ```
 
-## 关键技术特点
+## Documentation
 
-1. **CGL节点+边界截断**：严格实施狄利克雷边界条件
-2. **非对称求解**：采用`eig+.real`避免奇偶解耦（Nyquist振荡）
-3. **三阶段稳定化**：L尺度扫描 → 能级跟踪 → 共振识别
-4. **双方法对比**：MAB-GPS（全局谱） vs B-样条（局部有限元）
+- **[README_zh.md](README_zh.md)**: Chinese version of this document
+- **[工程说明.md](工程说明.md)**: Complete engineering documentation in Chinese (algorithm principles, strategy choices, verification results, defect fixes)
+- **[CCR_SUMMARY.md](CCR_SUMMARY.md)**: CCR implementation summary in Chinese
+- **[CCR_IMPLEMENTATION_GUIDE.md](CCR_IMPLEMENTATION_GUIDE.md)**: CCR implementation guide in Chinese
+- **[FILES_MANIFEST.md](FILES_MANIFEST.md)**: Detailed file manifest in Chinese
 
-## 物理体系
+## Technical Highlights
 
-当前工作参数（来自`config.py`）：
-- **核电荷**：Z=1
-- **屏蔽参数**：λ=0.1
-- **量子数**：κ=1（p₁/₂态，提供离心势垒）
-- **能量范围**：连续区共振态搜索
+1. **CGL nodes with boundary truncation**: Strict enforcement of Dirichlet boundary conditions
+2. **Asymmetric solving**: Using `eig+.real` to avoid even-odd decoupling (Nyquist oscillations)
+3. **Three-stage stabilization**: L-scale scan → level tracking → resonance identification
+4. **Dual-method comparison**: MAB-GPS (global spectral) vs B-spline (local finite element)
+5. **Complex coordinate rotation**: Transforms resonances in continuum into discrete complex eigenvalues
 
-这些参数可在`config.py`中修改，或通过`ccr_scan.py`的`--N`, `--L`, `--alpha-map`选项在运行时覆盖。
+## Physical System
 
-## 详细说明
+Current working parameters (from `config.py`):
+- **Nuclear charge**: Z=1
+- **Screening parameter**: λ=0.1
+- **Quantum number**: κ=1 (p₁/₂ state, provides centrifugal barrier)
+- **Energy range**: Resonance search in continuum
 
-请参阅 `工程说明.md` 获取：
-- 算法策略与原理详解
-- 数值方法选择理由
-- 验证测试结果
-- 缺陷修复历程
-- 待考证项清单
+These parameters can be modified in `config.py` or overridden at runtime via `ccr_scan.py` options (`--N`, `--L`, `--alpha-map`).
+
+## Dependencies
+
+- **Required**: numpy, scipy, matplotlib, pytest
+- **Standard library**: argparse, pathlib, datetime, tempfile, importlib, typing
+
+## License
+
+This project is open source and available for academic and research use.
+
+## Citation
+
+If you use this code in your research, please cite:
+
+```
+Dirac Equation Solver: A numerical framework for relativistic quantum resonance studies.
+GitHub: https://github.com/Nihilism-tag/dirac-equation-solver
+```
+
+## Contact
+
+For questions or contributions, please open an issue on the [GitHub repository](https://github.com/Nihilism-tag/dirac-equation-solver).
 
 ---
-**文档版本**：v3.0（稳定化方法完整版）  
-**生成日期**：2026年3月26日
+
+**Documentation Version**: v3.0 (complete stabilization method version)  
+**Generated Date**: March 26, 2026  
+**Project Repository**: https://github.com/Nihilism-tag/dirac-equation-solver
