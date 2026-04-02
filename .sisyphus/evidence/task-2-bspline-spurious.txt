@@ -1,2 +1,0 @@
-Spurious in gap: 23
-PASS: True

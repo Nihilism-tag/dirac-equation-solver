@@ -1,2 +1,0 @@
-E=0.99997337
-reasonable: True

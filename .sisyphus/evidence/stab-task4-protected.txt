@@ -1,7 +1,0 @@
-config.py exists: True
-mabgps.py exists: True
-potential.py exists: True
-bspline.py exists: True
-main.py exists: True
-plot.py exists: True
-test_solvers.py exists: True

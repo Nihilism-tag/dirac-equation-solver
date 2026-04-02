@@ -1,4 +1,0 @@
-BC_decay (P(r_max)<1e-4): True (P=6.40e-06)
-Hermitian (len=296==2*148): True
-Origin (r_min=1.06e-04>0): True
-VERDICT: PASS

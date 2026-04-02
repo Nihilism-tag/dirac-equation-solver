@@ -1,1 +1,0 @@
-oscillation_rate=0.163 PASS

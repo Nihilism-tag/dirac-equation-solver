@@ -1,3 +1,0 @@
-  L=1.000: 0 levels in window
-WARNING: No tracks found — trajectories matrix is empty.
-PASS

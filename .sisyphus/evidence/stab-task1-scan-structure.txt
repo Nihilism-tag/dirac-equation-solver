@@ -1,2 +1,0 @@
-  L=1.000: 41 levels in window
-PASS

@@ -1,4 +1,0 @@
-Numerical: 0.7411342895
-Analytic:  0.7411346311
-Rel error: 4.61e-07
-PASS: True

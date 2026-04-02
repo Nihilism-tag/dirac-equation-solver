@@ -1,3 +1,0 @@
-Files changed [4/4 expected]: True
-No scope creep (bspline/potential markers): True
-VERDICT: PASS

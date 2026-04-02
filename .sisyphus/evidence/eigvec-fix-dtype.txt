@@ -1,2 +1,0 @@
-vecs dtype: float64
-PASS
