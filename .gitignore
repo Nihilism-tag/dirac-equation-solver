@@ -8,11 +8,12 @@ env/
 venv/
 .env
 .sisyphus/
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.pdf
+/*.png
+/*.jpg
+/*.jpeg
+/*.gif
+/*.pdf
 *.log
 .DS_Store
 Thumbs.db
+/*.md
